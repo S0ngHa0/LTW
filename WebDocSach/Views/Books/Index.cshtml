@@ -1,0 +1,45 @@
+﻿@model IEnumerable<WebDocSach.Models.Book>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Index</h2>
+<p>
+    @Html.ActionLink("Create New", "Create",null, new { @class = "btn btn-outline-info" })
+</p>
+<div class="row">
+    <hr />
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel panel-heading">
+                    <strong>@item.TenSach</strong>
+                </div>
+                <div class="panel-body">
+                    <p><strong>Tác giả: </strong>@item.TacGia</p>
+                    <p><strong>Thể loại: </strong>@item.IdTheLoai</p>
+                    <p><img src="@item.HinhAnh" alt="hinh thumnail"></p>
+                    <p><strong>Tình trạng: </strong>@item.TinhTrang</p>
+                    <p><strong>Ngày đăng: </strong>@item.NgayTao</p>
+                </div>
+                <div class="panel-footer clearfix">
+                    <div class="pull-right">
+                        @Html.ActionLink("Read more...", "Detail", new
+                        {
+                            id = item.Id
+                        }, new { @class = "btn btn-info" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new
+                        { @class = "btn btn-info" })
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new
+                   {
+                       @class = "btn btn-info"
+                   })
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+    }
+</div>

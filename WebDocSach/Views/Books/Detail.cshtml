@@ -1,0 +1,25 @@
+﻿@model WebDocSach.Models.Book
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Thông tin về sách</h2>
+<h2>@Html.DisplayFor(model => model.TenSach)</h2>
+<div class="col-sm-12 col=md-12">
+    <div class="img-thumbnail" style="text-align:center;">
+        <img src="@Html.DisplayFor(model=>model.HinhAnh)" alt="thumbnail" style="width: 550px; height: 360px">
+    </div>
+    <div class="caption">
+        <p>Tác giả: @Html.DisplayFor(model => model.TacGia)</p>
+        <p>Thể loại: @Html.DisplayFor(model => model.IdTheLoai)</p>
+        <p>Nội dung: @Html.DisplayFor(model => model.NoiDung)</p>
+        <p>Tình trạng: @Html.DisplayFor(model => model.TinhTrang)</p>
+        <p>Ngày đăng sách: @Html.DisplayFor(model => model.NgayTao)</p>
+        <p>Link sách: <a href="@Model.Nguon" target="_blank">@Model.Nguon</a></p>
+
+        <p>
+            <a href="#" class="btn btn-dark" role="button">Đọc</a>
+            @Html.ActionLink("Back", "Index", "", new { @class = "btn btn-dark" })
+        </p>
+    </div>
+</div>

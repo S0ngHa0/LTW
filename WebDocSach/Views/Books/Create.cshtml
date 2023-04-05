@@ -1,0 +1,109 @@
+﻿@model WebDocSach.Models.Book
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Book</h2>
+
+@using (Html.BeginForm("Create", "Books"))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.TenSach, "Tên sách")
+        @Html.TextBoxFor(m => m.TenSach, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IdTheLoai, "Thể loại")
+        @Html.DropDownList("IdTheLoai", new SelectList(Model.ListTheLoai, "Id", "Name"), new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TacGia, "Tác giả")
+        @Html.TextBoxFor(m => m.TacGia, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NoiDung, "Nội dung")
+        @Html.TextBoxFor(m => m.NoiDung, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <strong>Hình</strong>
+            @Html.EditorFor(model => model.HinhAnh, new
+            {
+                htmlAttributes = new
+                {
+                    @class = "form-control"
+                }
+            })
+            @Html.ValidationMessageFor(model => model.HinhAnh, "", new { @class = "text-danger" })
+            <input type="file" name="fileUpload" id="fileUpload" accept="image/*"
+                   style="display:none;" />
+            <input type="button" id="btnUpload" value="Chọn" class="btn btn-dark" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NgayTao, "Ngày đăng sách")
+        @Html.TextBoxFor(m => m.NgayTao, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TinhTrang, "Tình trạng")
+        @Html.TextBoxFor(m => m.TinhTrang, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nguon, "Link sách")
+        @Html.TextBoxFor(m => m.Nguon, new { @class = "form-control" })
+    </div>
+    <button type="submit" value="Create" class="btn btn-dark">Create</button>
+</div>
+}
+
+@section upload
+ {
+    <script>
+        $(function () {
+            $('#btnUpload').click(function () {
+                $('#fileUpload').trigger('click');
+            });
+        });
+        $('#fileUpload').change(function () {
+            if (window.FormData !== undefined) {
+                var fileUpload = $('#fileUpload').get(0);
+                var files = fileUpload.files;
+                var formData = new FormData();
+                formData.append('file', files[0]);
+                $.ajax(
+                    {
+                        type: 'POST',
+                        url: '/Books/ProcessUpload',
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        success: function (urlImage) {
+                            $('#pictureUpload').attr('src', urlImage);
+                            $('#HinhAnh').val(urlImage);
+                        },
+                        error: function (err) {
+                            alert('Error ', err.statusText);
+                        }
+                    });
+            }
+        });
+    </script>
+}
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+

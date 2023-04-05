@@ -6,72 +6,82 @@
 }
 <h2>Index</h2>
 <p>
-    @Html.ActionLink("Create New", "Create",null, new { @class = "btn btn-outline-info" })
-</p>
-<div class="row">
-    <hr />
-    @foreach (var item in Model)
+    @using (Html.BeginForm("Index", "Books", FormMethod.Get))
     {
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <div class="panel panel-default">
-                <div class="panel panel-heading">
-                    <strong>@item.TenSach</strong>
-                    <br />
-                    @if (ViewBag.LoginUser != null)
-                    {
-                        if (item.isShowFollow)
+    <p>
+        @Html.TextBox("searchString")<input type="submit" value="Tìm Sách" />
+    </p>
+}
+</p>
+    <p>
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-outline-info" })
+    </p>
+    <div class="row">
+        <hr />
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel panel-heading">
+                        <strong>@item.TenSach</strong>
+                        <br />
+                        @if (ViewBag.LoginUser != null)
                         {
-                            <button data-books-id="@item.Id" class="btn btn-outline-success btn-sm js-toggle-follow">Follow</button>
+                            if (item.isShowFollow)
+                            {
+                                <button data-books-id="@item.Id" class="btn btn-outline-success btn-sm js-toggle-follow">Follow</button>
+                            }
+                            else
+                            {
+                                <button data-books-id="@item.Id" class="btn btn-outline-danger btn-sm js-toggle-follow">UnFollow</button>
+                            }
                         }
-                        else
-                        {
-                            <button data-books-id="@item.Id" class="btn btn-outline-danger btn-sm js-toggle-follow">UnFollow</button>
-                        }
-                    }
-                </div>
-                <div class="panel-body">
-                    <p><strong>Tác giả: </strong>@item.TacGia</p>
-                    <p><strong>Thể loại: </strong>@item.IdTheLoai</p>
-                    <p><img src="@item.HinhAnh" alt="hinh thumnail" style="width: 210px; height: 320px"></p>
-                    <p><strong>Tình trạng: </strong>@item.TinhTrang</p>
-                    <p><strong>Ngày đăng: </strong>@item.NgayTao</p>
-                </div>
-                <div class="panel-footer clearfix">
-                    <div class="pull-right">
-                        @Html.ActionLink("Read more...", "Detail", new
-                        {
-                            id = item.Id
-                        }, new { @class = "btn btn-info" })
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new
-                        { @class = "btn btn-info" })
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new
-                   {
-                       @class = "btn btn-info"
-                   })
                     </div>
+                    <div class="panel-body">
+                        <p><strong>Tác giả: </strong>@item.TacGia</p>
+                        <p><strong>Thể loại: </strong>@item.IdTheLoai</p>
+                        <p><img src="@item.HinhAnh" alt="hinh thumnail" width="210" height="320"></p>
+                        <p><strong>Tình trạng: </strong>@item.TinhTrang</p>
+                        <p><strong>Ngày đăng: </strong>@item.NgayTao</p>
+                    </div>
+                    <div class="panel-footer clearfix">
+                        <div class="pull-right">
+                            @Html.ActionLink("Read more...", "Detail", new
+                            {
+                                id = item.Id
+                            }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new
+                            { @class = "btn btn-info" })
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new
+                       {
+                           @class = "btn btn-info"
+                       })
+                        </div>
+                    </div>
+                    <hr />
                 </div>
-                <hr />
             </div>
-        </div>
-    }
-    @section scripts{
-        <script>
-            $(document).ready(function () {
-                $(".js-toggle-follow").click(function (e) {
-                    var button = $(e.target);
-                    $.post("/api/follows", { bookId: button.attr("data-books-id") })
-                        .done(function () {
-                            button.addClass("btn-success")
-                            button.text("UnFollow")
-                            location.reload();
-                        })
-                        .fail(function () {
-                            alert("Something failed");
-                        });
+        }
+        @section scripts{
+            <script>
+                $(document).ready(function () {
+                    $(".js-toggle-follow").click(function (e) {
+                        var button = $(e.target);
+                        $.post("/api/follows", { bookId: button.attr("data-books-id") })
+                            .done(function () {
+                                button.addClass("btn-success")
+                                button.text("UnFollow")
+                                location.reload();
+                            })
+                            .fail(function () {
+                                alert("Something failed");
+                            });
+                    });
                 });
-            });
 
-        </script>
-    }
+            </script>
+        }
+        
+        
 
-</div>
+    </div>

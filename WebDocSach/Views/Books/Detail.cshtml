@@ -15,10 +15,11 @@
         <p>Nội dung: @Html.DisplayFor(model => model.NoiDung)</p>
         <p>Tình trạng: @Html.DisplayFor(model => model.TinhTrang)</p>
         <p>Ngày đăng sách: @Html.DisplayFor(model => model.NgayTao)</p>
-        <p>Link sách: <a href="@Model.Nguon" target="_blank">@Model.Nguon</a></p>
+
+        <a target="_blank" href="@Model.Nguon" title="@Model."><button class="mg10 pt10 pr20 pb10 pl20" style="cursor:pointer;border:none; height:50px; background:#009bd5; color:#fff; border-radius:5px; margin-left: 0px;"><span class="fa fa-book pr10"></span>Đọc online</button></a>
 
         <p>
-            <a href="#" class="btn btn-dark" role="button">Đọc</a>
+            
             @Html.ActionLink("Back", "Index", "", new { @class = "btn btn-dark" })
         </p>
     </div>

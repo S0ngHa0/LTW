@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebDocSach.Models
 {
-    public class Book
+    public class Book 
     {
         public int Id { get; set; }
         public ApplicationUser UserName { get; set; }

@@ -19,11 +19,22 @@ namespace WebDocSach.Controllers
         }
         // GET: Books
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
             var books = _dbContext.Books
                 .Include("TheLoai")
                 .ToList();
+            var book = from l in _dbContext.Books
+                       select l;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                book = book.Where(c => c.TenSach.ToLower().Contains(searchString));
+            }
+
+            var bookList = new List<Book>();
+            bookList.AddRange(book);
+            bookList.AddRange(books);
 
             var loginUser = User.Identity.GetUserId();
             ViewBag.LoginUser = loginUser;
@@ -35,8 +46,12 @@ namespace WebDocSach.Controllers
                     i.isShowFollow = true;
                 }
             }
-            return View(books);
+            return View(bookList);
         }
+
+
+
+
         public ActionResult Create()
         {
             Book book = new Book();
@@ -60,6 +75,7 @@ namespace WebDocSach.Controllers
         [Authorize]
         public ActionResult Detail(int? id)
         {
+
             if (id == null)
                 return HttpNotFound();
             Book find = Book.FindBookById(id.Value);
@@ -117,6 +133,7 @@ namespace WebDocSach.Controllers
         public ActionResult Delete(int id)
         {
             Book books = _dbContext.Books.Find(id);
+
             if (books == null)
             {
                 return HttpNotFound();
@@ -133,6 +150,12 @@ namespace WebDocSach.Controllers
             using (var db = new ApplicationDbContext())
             {
                 Book books = _dbContext.Books.Find(id);
+                if (books != null) // Nếu quyển sách tồn tại
+                {
+                    var follows = _dbContext.Follows.Where(f => f.BookId ==id ); 
+                    _dbContext.Follows.RemoveRange(follows); 
+                    
+                }
                 _dbContext.Books.Remove(books);
                 _dbContext.SaveChanges();
             }
@@ -148,6 +171,16 @@ namespace WebDocSach.Controllers
             }
             file.SaveAs(Server.MapPath("~/Content/Img/" + file.FileName));
             return "/Content/Img/" + file.FileName;
+        }
+        [Authorize]
+        public ActionResult Following()
+        {
+            var userId = User.Identity.GetUserId();
+            var books = _dbContext.Follows
+                .Where(f => f.FolloweeId == userId)
+                .Select(f => f.Book)
+                .ToList();
+            return View(books);
         }
 
 

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<WebDocSach.Models.Book>
+@{
+    ViewBag.Title = "Following";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sách Đang Theo Dõi</h2>
+<div class="row">
+    <ul style="list-style: none;">
+        @foreach (var book in Model)
+        {
+            <li>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel panel-heading">
+                            <a href="@Url.Action("Detail", "Books", new {id = book.Id})">
+                                <strong>@book.TenSach</strong>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <p><strong>Tác giả: </strong>@book.TacGia</p>
+                        <p><strong>Thể loại: </strong>@book.TheLoai</p>
+                        <a href="@Url.Action("Detail", "Books", new {id = book.Id})">
+                            <img src="@book.HinhAnh" alt="@book.TenSach" style="width: 190px; height: 247px;" />
+                        </a>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+<style>
+    a:hover {
+        text-decoration: none;
+    }
+
+    a {
+        color: black;
+    }
+
+    .panel {
+        margin-bottom: 5px;
+    }
+</style>
+

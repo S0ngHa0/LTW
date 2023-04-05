@@ -22,8 +22,19 @@ namespace WebDocSach.Controllers
         public ActionResult Index()
         {
             var books = _dbContext.Books
-                .Include("TheLoai");
+                .Include("TheLoai")
+                .ToList();
 
+            var loginUser = User.Identity.GetUserId();
+            ViewBag.LoginUser = loginUser;
+            foreach (Book i in books)
+            {
+                Follow find = _dbContext.Follows.FirstOrDefault(f => f.FolloweeId == loginUser && f.BookId == i.Id);
+                if (find == null)
+                {
+                    i.isShowFollow = true;
+                }
+            }
             return View(books);
         }
         public ActionResult Create()

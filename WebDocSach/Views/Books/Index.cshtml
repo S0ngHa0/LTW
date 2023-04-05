@@ -16,11 +16,23 @@
             <div class="panel panel-default">
                 <div class="panel panel-heading">
                     <strong>@item.TenSach</strong>
+                    <br />
+                    @if (ViewBag.LoginUser != null)
+                    {
+                        if (item.isShowFollow)
+                        {
+                            <button data-books-id="@item.Id" class="btn btn-outline-success btn-sm js-toggle-follow">Follow</button>
+                        }
+                        else
+                        {
+                            <button data-books-id="@item.Id" class="btn btn-outline-danger btn-sm js-toggle-follow">UnFollow</button>
+                        }
+                    }
                 </div>
                 <div class="panel-body">
                     <p><strong>Tác giả: </strong>@item.TacGia</p>
                     <p><strong>Thể loại: </strong>@item.IdTheLoai</p>
-                    <p><img src="@item.HinhAnh" alt="hinh thumnail"></p>
+                    <p><img src="@item.HinhAnh" alt="hinh thumnail" style="width: 210px; height: 320px"></p>
                     <p><strong>Tình trạng: </strong>@item.TinhTrang</p>
                     <p><strong>Ngày đăng: </strong>@item.NgayTao</p>
                 </div>
@@ -42,4 +54,24 @@
             </div>
         </div>
     }
+    @section scripts{
+        <script>
+            $(document).ready(function () {
+                $(".js-toggle-follow").click(function (e) {
+                    var button = $(e.target);
+                    $.post("/api/follows", { bookId: button.attr("data-books-id") })
+                        .done(function () {
+                            button.addClass("btn-success")
+                            button.text("UnFollow")
+                            location.reload();
+                        })
+                        .fail(function () {
+                            alert("Something failed");
+                        });
+                });
+            });
+
+        </script>
+    }
+
 </div>

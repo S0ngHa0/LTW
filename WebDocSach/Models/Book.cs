@@ -34,5 +34,6 @@ namespace WebDocSach.Models
             ApplicationDbContext _dbContext = new ApplicationDbContext();
             return _dbContext.Books.FirstOrDefault(p => p.Id == id);
         }
+        public bool isShowFollow = false;
     }
 }
